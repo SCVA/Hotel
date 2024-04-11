@@ -1,5 +1,6 @@
 package moviles.hotel;
 
+import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,6 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import moviles.hotel.data.HotelDBHelper;
+import moviles.hotel.data.Huesped;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -19,7 +25,10 @@ import android.widget.Button;
  */
 public class Login extends Fragment implements View.OnClickListener {
 
+    private HotelDBHelper db;
     private Button btnLogin;
+    private EditText usrText;
+    private EditText passwordText;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -73,15 +82,27 @@ public class Login extends Fragment implements View.OnClickListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated( view, savedInstanceState );
         btnLogin = (Button) getActivity().findViewById( R.id.btnIngresar );
+        usrText = (EditText)  getActivity().findViewById( R.id.userText);
+        passwordText = (EditText) getActivity().findViewById( R.id.passText ) ;
+
         btnLogin.setOnClickListener( this );
+        db = new HotelDBHelper( getContext() );
     }
 
     @Override
     public void onClick(View view) {
-        if(view.getId()==btnLogin.getId()){
-            Bundle bundle = new Bundle();
-            bundle.putString( "userName","SCVA" );
-            Navigation.findNavController( view ).navigate( R.id.menu,bundle);
+        //Huesped hps = new Huesped( "scvanegasa","1234","Sebastian","scvanegasa@libertadores.edu.co",6012544750l );
+        //db.saveHuesped( hps );
+        Cursor cursor = db.getHuespedByUser( usrText.getText().toString(), passwordText.getText().toString() );
+        if(cursor.moveToNext()){
+            Huesped hps = new Huesped( cursor );
+            if(view.getId()==btnLogin.getId()){
+                Bundle bundle = new Bundle();
+                bundle.putString( "userName", hps.getNombre());
+                Navigation.findNavController( view ).navigate( R.id.menu,bundle);
+            }
+        }else{
+            Toast.makeText(getContext(),"Credenciales invalidas",Toast.LENGTH_LONG).show();
         }
     }
 }

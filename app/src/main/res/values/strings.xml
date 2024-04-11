@@ -7,4 +7,6 @@
     <string name="btnTxtCuenta">Account</string>
     <string name="txtWelcome">Welcome</string>
     <string name="btnTxtMainMenu">Main Menu</string>
+    <string name="userTextTxt">Username</string>
+    <string name="passTextTxt">Password</string>
 </resources>
