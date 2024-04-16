@@ -9,6 +9,5 @@ public class HuespedContract {
         public static final String col_password = "password";
         public static final String col_nombre = "name";
         public static final String col_email = "email";
-        public static final String col_telefono = "telefono";
     }
 }

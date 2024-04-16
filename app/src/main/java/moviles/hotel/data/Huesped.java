@@ -10,14 +10,12 @@ public class Huesped {
     private String password;
     private String nombre;
     private String email;
-    private long telefono;
 
-    public Huesped(String usuario, String password, String nombre, String email, long telefono) {
+    public Huesped(String usuario, String password, String nombre, String email) {
         this.usuario = usuario;
         this.password = password;
         this.nombre = nombre;
         this.email = email;
-        this.telefono = telefono;
     }
 
     public ContentValues toContentValues() {
@@ -26,7 +24,6 @@ public class Huesped {
         values.put(HuespedEntry.col_password, password);
         values.put(HuespedEntry.col_nombre, nombre);
         values.put(HuespedEntry.col_email, email);
-        values.put(HuespedEntry.col_telefono, telefono);
         return values;
     }
 
@@ -35,7 +32,6 @@ public class Huesped {
         this.password = cursor.getString( cursor.getColumnIndex( HuespedEntry.col_password ) );
         this.nombre = cursor.getString( cursor.getColumnIndex( HuespedEntry.col_nombre ) );
         this.email = cursor.getString( cursor.getColumnIndex( HuespedEntry.col_email ) );
-        this.telefono = cursor.getLong( cursor.getColumnIndex( HuespedEntry.col_telefono ) );
     }
 
     public String getUsuario() {
@@ -54,7 +50,4 @@ public class Huesped {
         return email;
     }
 
-    public long getTelefono() {
-        return telefono;
-    }
 }

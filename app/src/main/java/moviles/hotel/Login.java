@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 import moviles.hotel.data.HotelDBHelper;
 import moviles.hotel.data.Huesped;
+import moviles.hotel.data.HuespedContract;
+import moviles.hotel.data.Telefono;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -91,8 +93,9 @@ public class Login extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        //Huesped hps = new Huesped( "scvanegasa","1234","Sebastian","scvanegasa@libertadores.edu.co",6012544750l );
-        //db.saveHuesped( hps );
+        //Huesped hps2 = new Huesped( "scvanegasa","1234","Sebastian","scvanegasa@libertadores.edu.co");
+        //Telefono tel = new Telefono( "scvanegasa",6012544750l );
+        //db.saveHuesped( hps2,tel );
         Cursor cursor = db.getHuespedByUser( usrText.getText().toString(), passwordText.getText().toString() );
         if(cursor.moveToNext()){
             Huesped hps = new Huesped( cursor );
@@ -104,5 +107,13 @@ public class Login extends Fragment implements View.OnClickListener {
         }else{
             Toast.makeText(getContext(),"Credenciales invalidas",Toast.LENGTH_LONG).show();
         }
+        /*
+        Cursor cursor = db.getUsuarioTelefono();
+        if(cursor.moveToNext()){
+           Huesped hps = new Huesped(cursor);
+           Telefono tel = new Telefono( cursor );
+           System.out.println("El usuario "+hps.getUsuario()+" Tiene telefono "+tel.getTelefono());
+        }
+         */
     }
 }
