@@ -11,6 +11,8 @@ public class Huesped {
     private String nombre;
     private String email;
 
+    private Telefono telefono;
+
     public Huesped(String usuario, String password, String nombre, String email) {
         this.usuario = usuario;
         this.password = password;
@@ -50,4 +52,11 @@ public class Huesped {
         return email;
     }
 
+    public Telefono getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(Telefono telefono) {
+        this.telefono = telefono;
+    }
 }

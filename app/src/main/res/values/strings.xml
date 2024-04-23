@@ -9,4 +9,7 @@
     <string name="btnTxtMainMenu">Main Menu</string>
     <string name="userTextTxt">Username</string>
     <string name="passTextTxt">Password</string>
+    <string name="txtName">Name</string>
+    <string name="txtEmail">Email</string>
+    <string name="txtTelefono">Telephone</string>
 </resources>

@@ -13,12 +13,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 import moviles.hotel.data.HotelDBHelper;
 import moviles.hotel.data.Huesped;
 import moviles.hotel.data.HuespedContract;
 import moviles.hotel.data.Telefono;
+import moviles.hotel.data.TelefonoContract;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,6 +35,8 @@ public class Login extends Fragment implements View.OnClickListener {
     private Button btnLogin;
     private EditText usrText;
     private EditText passwordText;
+
+    private ListView listaHuesped;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -83,19 +89,45 @@ public class Login extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated( view, savedInstanceState );
+
         btnLogin = (Button) getActivity().findViewById( R.id.btnIngresar );
         usrText = (EditText)  getActivity().findViewById( R.id.userText);
         passwordText = (EditText) getActivity().findViewById( R.id.passText ) ;
+        listaHuesped = (ListView) getActivity().findViewById( R.id.listViewHuesped );
 
         btnLogin.setOnClickListener( this );
         db = new HotelDBHelper( getContext() );
+
+        // Adaptador lista
+        /*
+        ArrayList<Huesped> listaHuespedes = new ArrayList<Huesped>();
+        Cursor cursor = db.getUsuarioTelefono();
+        if(cursor.moveToFirst()){
+            do{
+                Huesped nuevo = new Huesped( cursor );
+                Telefono telefononuevo = new Telefono( cursor );
+                nuevo.setTelefono( telefononuevo );
+                listaHuespedes.add(nuevo);
+            }while(cursor.moveToNext());
+        }
+        HuespedAdapter adaptador = new HuespedAdapter( getActivity(), listaHuespedes);
+        listaHuesped.setAdapter( adaptador );
+        */
+
+        //Adaptador Cursores
+        Cursor cursor = db.getUsuarioTelefono();
+        HuespedCursorAdapter adaptador = new HuespedCursorAdapter( getActivity(),cursor );
+        listaHuesped.setAdapter( adaptador );
     }
 
     @Override
     public void onClick(View view) {
-        //Huesped hps2 = new Huesped( "scvanegasa","1234","Sebastian","scvanegasa@libertadores.edu.co");
-        //Telefono tel = new Telefono( "scvanegasa",6012544750l );
-        //db.saveHuesped( hps2,tel );
+        Cursor cursor2 = db.getHuespedByUser( usrText.getText().toString() );
+        if (!cursor2.moveToNext()){
+            Huesped hps2 = new Huesped( usrText.getText().toString(),passwordText.getText().toString(),usrText.getText().toString(),usrText.getText().toString()+"@libertadores.edu.co");
+            Telefono tel = new Telefono( usrText.getText().toString(),(long)(Math.random()*100000000+1) );
+            db.saveHuesped( hps2,tel );
+        }
         Cursor cursor = db.getHuespedByUser( usrText.getText().toString(), passwordText.getText().toString() );
         if(cursor.moveToNext()){
             Huesped hps = new Huesped( cursor );
@@ -107,13 +139,5 @@ public class Login extends Fragment implements View.OnClickListener {
         }else{
             Toast.makeText(getContext(),"Credenciales invalidas",Toast.LENGTH_LONG).show();
         }
-        /*
-        Cursor cursor = db.getUsuarioTelefono();
-        if(cursor.moveToNext()){
-           Huesped hps = new Huesped(cursor);
-           Telefono tel = new Telefono( cursor );
-           System.out.println("El usuario "+hps.getUsuario()+" Tiene telefono "+tel.getTelefono());
-        }
-         */
     }
 }
