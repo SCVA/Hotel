@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Hotel</string>
+    <string name="hello_blank_fragment">Hola fragmento en blanco</string>
+    <string name="btnTxtIngresar">Ingresar</string>
+    <string name="btnTxtCuenta">Cuenta</string>
+    <string name="txtWelcome">Bienvenido</string>
+    <string name="btnTxtMainMenu">Menú principal</string>
+    <string name="userTextTxt">Usuario</string>
+    <string name="passTextTxt">Contraseña</string>
+    <string name="txtName">Nombre</string>
+    <string name="txtEmail">Correo</string>
+    <string name="txtTelefono">Telefono</string>
+</resources>

@@ -3,7 +3,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="btnTxtIngresar">Login</string>
-    <string name="btnTxtSpa">Spa</string>
+    <string name="btnTxtSpa" translatable="false">Spa</string>
     <string name="btnTxtCuenta">Account</string>
     <string name="txtWelcome">Welcome</string>
     <string name="btnTxtMainMenu">Main Menu</string>
