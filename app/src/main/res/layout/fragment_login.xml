@@ -46,6 +46,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userText" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listaItemsR"
+        android:layout_width="395dp"
+        android:layout_height="303dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnIngresar"
+        tools:listitem="@layout/huesped_item_list" />
+
+    <!--
     <ListView
         android:id="@+id/listViewHuesped"
         android:layout_width="391dp"
@@ -56,4 +67,5 @@
         app:layout_constraintTop_toBottomOf="@+id/btnIngresar"
         app:layout_constraintVertical_bias="0.985"
         tools:listitem="@layout/huesped_item_list" />
+        -->
 </androidx.constraintlayout.widget.ConstraintLayout>

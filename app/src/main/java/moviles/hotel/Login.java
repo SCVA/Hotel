@@ -1,16 +1,20 @@
 package moviles.hotel;
 
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -31,12 +35,14 @@ import moviles.hotel.data.TelefonoContract;
  */
 public class Login extends Fragment implements View.OnClickListener {
 
+    private Boolean recyclerActivo = true;
     private HotelDBHelper db;
     private Button btnLogin;
     private EditText usrText;
     private EditText passwordText;
-
     private ListView listaHuesped;
+    private RecyclerView listaHuespedR;
+    private HuespedRecyclerAdapter adapatador;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -93,31 +99,52 @@ public class Login extends Fragment implements View.OnClickListener {
         btnLogin = (Button) getActivity().findViewById( R.id.btnIngresar );
         usrText = (EditText)  getActivity().findViewById( R.id.userText);
         passwordText = (EditText) getActivity().findViewById( R.id.passText ) ;
-        listaHuesped = (ListView) getActivity().findViewById( R.id.listViewHuesped );
-
         btnLogin.setOnClickListener( this );
         db = new HotelDBHelper( getContext() );
 
-        // Adaptador lista
-        /*
-        ArrayList<Huesped> listaHuespedes = new ArrayList<Huesped>();
-        Cursor cursor = db.getUsuarioTelefono();
-        if(cursor.moveToFirst()){
-            do{
-                Huesped nuevo = new Huesped( cursor );
-                Telefono telefononuevo = new Telefono( cursor );
-                nuevo.setTelefono( telefononuevo );
-                listaHuespedes.add(nuevo);
-            }while(cursor.moveToNext());
-        }
-        HuespedAdapter adaptador = new HuespedAdapter( getActivity(), listaHuespedes);
-        listaHuesped.setAdapter( adaptador );
-        */
 
-        //Adaptador Cursores
-        Cursor cursor = db.getUsuarioTelefono();
-        HuespedCursorAdapter adaptador = new HuespedCursorAdapter( getActivity(),cursor );
-        listaHuesped.setAdapter( adaptador );
+        if(recyclerActivo){
+            listaHuespedR = (RecyclerView) getActivity().findViewById( R.id.listaItemsR );
+            listaHuespedR.setHasFixedSize( true );
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager( getContext() );
+            listaHuespedR.setLayoutManager( linearLayoutManager );
+            adapatador = new HuespedRecyclerAdapter( this::onClick2 );
+            listaHuespedR.setAdapter( adapatador );
+            loadPersonas();
+        }else{
+            //listaHuesped = (ListView) getActivity().findViewById( R.id.listViewHuesped );
+
+            // Adaptador lista
+            /*
+            ArrayList<Huesped> listaHuespedes = new ArrayList<Huesped>();
+            Cursor cursor = db.getUsuarioTelefono();
+            if(cursor.moveToFirst()){
+                do{
+                    Huesped nuevo = new Huesped( cursor );
+                    Telefono telefononuevo = new Telefono( cursor );
+                    nuevo.setTelefono( telefononuevo );
+                    listaHuespedes.add(nuevo);
+                }while(cursor.moveToNext());
+            }
+            HuespedAdapter adaptador = new HuespedAdapter( getActivity(), listaHuespedes);
+            listaHuesped.setAdapter( adaptador );
+            */
+
+            //Adaptador Cursores
+            Cursor cursor = db.getUsuarioTelefono();
+            HuespedCursorAdapter adaptador = new HuespedCursorAdapter( getActivity(),cursor );
+            listaHuesped.setAdapter( adaptador );
+
+            listaHuesped.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    cursor.move( i );
+                    Huesped huespedModificado = new Huesped( cursor );
+                    huespedModificado.setPassword( "1111" );
+                    db.updateHuesped(  huespedModificado, huespedModificado.getUsuario() );
+                }
+            } );
+        }
     }
 
     @Override
@@ -138,6 +165,30 @@ public class Login extends Fragment implements View.OnClickListener {
             }
         }else{
             Toast.makeText(getContext(),"Credenciales invalidas",Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void onClick2(HuespedRecyclerAdapter.ViewHolder view, Huesped huespedModificado) {
+        db.updateHuesped(  huespedModificado, huespedModificado.getUsuario() );
+        loadPersonas();
+    }
+
+    private void loadPersonas() {
+        new HuespedLoaderTask().execute( );
+    }
+
+    private class HuespedLoaderTask extends AsyncTask<Void, Void, Cursor> {
+
+        @Override
+        protected Cursor doInBackground(Void... voids) {
+            return db.getUsuarioTelefono();
+        }
+
+        @Override
+        protected void onPostExecute(Cursor cursor) {
+            if (cursor != null && cursor.getCount() > 0) {
+                adapatador.swapCursor( cursor );
+            }
         }
     }
 }

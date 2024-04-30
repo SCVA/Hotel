@@ -36,6 +36,10 @@ public class Huesped {
         this.email = cursor.getString( cursor.getColumnIndex( HuespedEntry.col_email ) );
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getUsuario() {
         return usuario;
     }
